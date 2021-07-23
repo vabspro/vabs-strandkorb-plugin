@@ -1,6 +1,6 @@
 # VABS Strandkorb Plugin for Wordpress
 
-This is a wordpress plugin to connect the VABS Backend with yout wordpres site.
+This is a wordpress plugin to connect the VABS Backend with your wordpres site.
 
 **Installation in 3 simple steps:**
 
@@ -10,7 +10,7 @@ This is a wordpress plugin to connect the VABS Backend with yout wordpres site.
 
 ### Alternative solution
 
-For static html websites yout need to run some more steps to connect your website with the VABS backend.
+For static html websites you need to run some more steps to connect your website with the VABS backend.
 
 **Installation in 4 simple steps:**
 
@@ -30,11 +30,11 @@ For static html websites yout need to run some more steps to connect your websit
             'chairs' => array (),
         );
 
-3.  load all required assets from the /assets folder and /dist/frontend folder
+3.  Load all required assets from the /assets folder and /dist/frontend folder
 
         <link rel="stylesheet" href="./vabs-strandkorb-plugin/dist/frontend/index.css">
         <script src="./vabs-strandkorb-plugin/dist/frontend/index.js"></script>
 
-4.  place a tag on your website which looks similar to this:
+4.  Place a tag on your website which looks similar to this:
 
         <div class="vrb" data-type="$your-variable" data-redirect="$your-redirect-url" data-agb="$your-agb-url" data-datenschutz="$your-dsgvo-url"></div>
