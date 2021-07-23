@@ -15,6 +15,20 @@ For static html websites yout need to run some more steps to connect your websit
 **Installation in 3 simple steps:**
 
 1.  Download the zip folder and place it within yout website root
+
+        $config = array (
+            'api_token' => '',
+            'client_id' => '',
+            'url' => '',
+            'referrer' => '',
+            'dsgvo' => '',
+            'agb' => '',
+            'redirect' => '',
+            'location' => '',
+            'locations' => array (),
+            'chairs' => array (),
+        );
+
 2.  To activate the connection, fill in the required fields in your ./public/config.php
 3.  load all required assets from the /assets folder and /dist/frontend folder
 4.  place a tag on your website which looks similar to this:
