@@ -9,3 +9,5 @@ logs/*
 composer.lock
 yarn.lock
 .DS_Store
+
+.gitconfig
