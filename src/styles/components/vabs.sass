@@ -1,0 +1,42 @@
+.vabs
+    position: relative
+    width: calc(100% - 16px)
+    margin-top: 16px
+    *
+        box-sizing: border-box
+    &__card
+        border: 1px solid rgba(0,0,0, .2)
+        border-radius: 8px
+        overflow: hidden
+
+        &--header
+            height: 160px
+            display: flex
+            align-items: center
+            justify-content: center
+            img
+                max-width: 240px
+
+        &--body
+            padding: 1rem
+            background-color: white
+
+    &__dashboard
+        position: relative
+
+        .form
+            position: relative
+            &__row
+                display: grid
+                grid-template-columns: 5% 30% calc(65% - .8rem)
+                grid-column-gap: .4rem
+            &__field
+                position: relative
+                margin-bottom: .8rem
+                label
+                    display: block
+                    color: rgba(0,0,0,.6)
+                    font-size: .8rem
+                input
+                    display: block
+                    width: 100%

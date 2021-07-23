@@ -1,0 +1,11 @@
+.DS_Store
+.parcel-cache/
+node_modules/
+
+public/config.php
+
+logs/*
+
+composer.lock
+yarn.lock
+.DS_Store

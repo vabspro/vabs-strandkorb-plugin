@@ -1,0 +1,36 @@
+.bookingform
+    position: relative
+    width: 100%
+    display: grid
+    grid-template-columns: calc(70% - 2rem) 30%
+    grid-column-gap: 2rem
+    
+
+    @media(max-width: 1024px)
+        display: block
+
+
+    &__section
+        padding: 1rem 0
+        &:last-of-type
+            border-bottom: none
+            padding: 1rem 0 0 0
+
+        h3
+            color: $primary
+            margin: 0
+
+        p
+            margin: 0 0 1rem 0
+
+    &__columns
+        display: grid
+        grid-template-columns: repeat(2, 1fr)
+        grid-column-gap: 1rem
+        margin-bottom: 2rem
+
+    &.mobile
+        display: block
+
+        .bookingfrom__aside
+            margin-top: 2rem

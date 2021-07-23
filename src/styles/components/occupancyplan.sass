@@ -1,0 +1,35 @@
+.occupancyplan
+    position: relative
+
+    &__body
+        position: relative
+        margin-top: 2rem
+        display: flex
+        flex-direction: row
+        justify-content: flex-start
+        align-items: flex-start
+
+        &--aside
+            width: 160px
+            &-name
+                text-align: center
+                padding: .6rem
+                height: 40px
+                margin-bottom: 2px
+        &--calendar
+            flex: 1
+            overflow-x: scroll
+            &-row
+                display: grid
+                grid-template-columns: repeat(31, 40px)
+                grid-column-gap: 2px
+                margin-bottom: 2px
+            &-day
+                display: block
+                padding: .6rem
+                text-align: center
+                height: 40px
+                width: 40px
+                background-color: whitesmoke
+                color: white
+                border-radius: 4px 

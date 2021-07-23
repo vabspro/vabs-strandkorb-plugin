@@ -1,0 +1,46 @@
+.bookingstable
+    position: relative
+
+    &__header
+        position: relative
+
+        label
+            display: block
+
+        &--columns
+            display: grid
+            grid-template-columns: repeat(3, 1fr)
+            align-items: flex-end
+            grid-column-gap: 1rem
+
+            input
+                display: block
+                width: 100%
+
+            button
+                display: block
+
+    &__body
+        position: relative
+        min-height: 240px
+
+        table
+            margin-top: 2rem
+            width: 100%
+            border-collapse: collapse
+            thead
+                th
+                    text-align: left
+                    padding: .4rem
+
+            tbody
+                tr
+                    &:nth-of-type(even)
+                        td
+                            background-color: whitesmoke
+                        
+                td
+                    text-align: left
+                    padding: .4rem
+                    font-size: 1rem
+                        

@@ -1,0 +1,33 @@
+{
+	"name": "vabsstrandkorb",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"leaflet": "^1.7.1",
+		"moment": "^2.29.1",
+		"react": "^16.8.6",
+		"react-dom": "^16.8.6",
+		"react-flatpickr": "^3.9.1",
+		"react-leaflet": "^2.7.0"
+	},
+	"scripts": {
+		"dev": "parcel watch ./src/scripts/backend/index.js ./src/scripts/frontend/index.js",
+		"build": "parcel build ./src/scripts/backend/index.js ./src/scripts/frontend/index.js"
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"@parcel/transformer-sass": "2.0.0-beta.2",
+		"parcel": "^2.0.0-beta.2"
+	}
+}
