@@ -12,7 +12,7 @@ This is a wordpress plugin to connect the VABS Backend with yout wordpres site.
 
 For static html websites yout need to run some more steps to connect your website with the VABS backend.
 
-**Installation in 3 simple steps:**
+**Installation in 4 simple steps:**
 
 1.  Download the zip folder and place it within yout website root
 2.  To activate the connection, fill in the required fields in your ./public/config.php
