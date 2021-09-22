@@ -5,7 +5,20 @@ import { useFilteredRentals } from "../hooks/useFilteredRentals";
 import { useGetBookingsId } from "../hooks/useGetBookingsId";
 
 const Card = ({ chair, onClose, onSelect, onRemove, online, selected }) => {
+	const [image, setImage] = useState(null);
+
 	const { name, beachChairTypeName, picture } = chair;
+	const { globalSettings } = useContext(Context);
+
+	useEffect(() => {
+		if (beachChairTypeName && globalSettings) {
+			const { chairtypes } = globalSettings;
+			const currentChair = chairtypes.find((type) => type.name === beachChairTypeName);
+
+			const img = picture ? picture : currentChair ? currentChair.image : null;
+			setImage(img);
+		}
+	}, [beachChairTypeName, globalSettings]);
 
 	return (
 		<div className="mappicker__card">
@@ -18,7 +31,10 @@ const Card = ({ chair, onClose, onSelect, onRemove, online, selected }) => {
 				<div
 					className="mappicker__card--header"
 					style={{
-						backgroundImage: picture !== "" ? picture : null,
+						backgroundImage: `url(${image})`,
+						backgroundSize: "cover",
+						backgroundRepeat: "no-repeat",
+						backgroundPosition: "center",
 					}}
 				/>
 				<div className="mappicker__card--body">
@@ -64,7 +80,9 @@ const Layer = ({ layer, onClose }) => {
 			</div>
 
 			<div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-				<h2 style={{ fontSize: "4rem", color: "rgba(0,0,0,.2)" }}>{layer.name}</h2>
+				<h2 style={{ fontSize: "4rem", color: "rgba(0,0,0,.2)", textAlign: "center", lineHeight: 1.2 }}>
+					{layer.name}
+				</h2>
 			</div>
 
 			<div className="mappicker__layer--rows">

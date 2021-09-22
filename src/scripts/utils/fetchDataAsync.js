@@ -14,12 +14,12 @@ export const fetchDataAsync = async ({ action, data }) => {
 					return res;
 				}
 			})
-			.catch((err) =>
+			.catch((err) => {
 				useErrorHandler({
 					message: err.message,
 					action: action,
-				})
-			);
+				});
+			});
 	}
 
 	return await fetch(`${location.origin}/wp-json/app/v1${action}`, {
@@ -40,11 +40,11 @@ export const fetchDataAsync = async ({ action, data }) => {
 				return res;
 			}
 		})
-		.catch((err) =>
+		.catch((err) => {
 			useErrorHandler({
 				message: err.message,
 				action: action,
 				payload: data,
-			})
-		);
+			});
+		});
 };

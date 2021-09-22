@@ -9,6 +9,7 @@ import { useLocations } from "../hooks/useLocations";
 import { useRange } from "../hooks/useRange";
 import { useSelectedRentals } from "../hooks/useSelectedRantals";
 import { useVoucher } from "../hooks/useVoucher";
+import { usePrices } from "../hooks/usePrices";
 
 export const Context = createContext();
 
@@ -20,6 +21,7 @@ export const ContextProvider = ({ children, type }) => {
 		shouldFetch: type === "voucher",
 		callback: () => setLoading(false),
 	});
+
 	const {
 		startDate,
 		endDate,
@@ -39,6 +41,8 @@ export const ContextProvider = ({ children, type }) => {
 		endTime,
 		shouldFetch: type === "booking",
 	});
+
+	const prices = usePrices({ selectedRentals, startDate, endDate, startTime, endTime });
 
 	const bookables = useBookables({
 		onFetchStart: () => setLoading(true),
@@ -95,6 +99,7 @@ export const ContextProvider = ({ children, type }) => {
 				recipient,
 				setRecipient,
 				type,
+				prices,
 			}}
 		>
 			{children}

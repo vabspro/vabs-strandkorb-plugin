@@ -3,16 +3,16 @@ import { fetchDataAsync } from "../utils/fetchDataAsync";
 
 export const usePrices = ({ selectedRentals, startDate, endDate, startTime, endTime }) => {
 	const [prices, setPrices] = useState([]);
-
 	useEffect(() => {
-		if (selectedRentals.length) {
+		if (selectedRentals && selectedRentals.length) {
 			(async () => {
 				const response = [];
-				for (const id in selectedRentals) {
+				for (let index = 0; index < selectedRentals.length; index++) {
+					const element = selectedRentals[index];
 					const price = await fetchDataAsync({
 						action: "/price",
 						data: {
-							id,
+							id: element.id,
 							startDate,
 							endDate,
 							startTime,

@@ -104,7 +104,7 @@ function FormControls({ agbLink, datenschutzLink, redirectLink }) {
 					}
 				}}
 			>
-				kostenpflichtig bestellen
+				{type && type === "contact" ? "Anfrage absenden" : "kostenpflichtig bestellen"}
 			</button>
 		</div>
 	);

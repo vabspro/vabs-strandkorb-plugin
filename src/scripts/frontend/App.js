@@ -12,11 +12,12 @@ import BeachChairPicker from "../components/BeachChairPicker";
 import MapPicker from "../components/MapPicker";
 import VoucherForm from "../modules/VoucherForm";
 import { useContainerSize } from "../hooks/useContainerSize";
+import ErrorFallback from "../components/ErrorFallback";
+import { ErrorBoundary } from "react-error-boundary";
 
 function App({ type, redirect, agb, datenschutz }) {
 	const { loading, success } = useContext(Context);
 	const { width } = useContainerSize();
-
 	let render = (
 		<>
 			<div className="bookingform__body">
@@ -84,12 +85,13 @@ function App({ type, redirect, agb, datenschutz }) {
 			</>
 		);
 	}
-
 	return (
-		<div className={width < 1024 ? "bookingform mobile" : "bookingform"}>
-			{loading ? <ActivityIndicator /> : null}
-			{success ? <SuccessMessage /> : render}
-		</div>
+		<ErrorBoundary FallbackComponent={ErrorFallback}>
+			<div className={width < 1024 ? "bookingform mobile" : "bookingform"}>
+				{loading ? <ActivityIndicator /> : null}
+				{success ? <SuccessMessage /> : render}
+			</div>
+		</ErrorBoundary>
 	);
 }
 

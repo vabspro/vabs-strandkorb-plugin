@@ -1,9 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../context/index";
 import moment from "moment";
 
 function Summary() {
-	const { contact, startDate, endDate, selectedRentals, voucher, recipient } = useContext(Context);
+	const [totalPrice, setTotalPrice] = useState(null);
+	const { contact, startDate, endDate, selectedRentals, voucher, recipient, prices } = useContext(Context);
+
+	useEffect(() => {
+		if (prices.length) {
+			let total = 0;
+			for (let index = 0; index < prices.length; index++) {
+				const element = prices[index];
+				total += element.price;
+			}
+
+			setTotalPrice(`${total}€`);
+		}
+	}, [prices]);
 
 	return (
 		<div className="summary">
@@ -50,8 +63,20 @@ function Summary() {
 					{selectedRentals.length ? (
 						<ul>
 							{selectedRentals.map((chair) => (
-								<li key={chair.id}>Strandkorb {chair.name}</li>
+								<li key={chair.id}>
+									<p>Strandkorb {chair.name}</p>
+									<p>
+										{prices.length && prices.find((price) => price.id === chair.id)
+											? `${prices.find((price) => price.id === chair.id)?.price}€`
+											: "-"}
+									</p>
+								</li>
 							))}
+
+							<li>
+								<strong>Summe</strong>
+								<strong>{totalPrice}</strong>
+							</li>
 						</ul>
 					) : null}
 

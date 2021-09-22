@@ -202,6 +202,10 @@ function AdminSettings({ config }) {
 								}
 							/>
 						</div>
+
+						<div className="form__field">
+							<a onClick={() => setLocations(locations.filter((loc) => loc.id !== l.id))}>löschen</a>
+						</div>
 					</div>
 				))}
 			{showForm && (
@@ -349,6 +353,10 @@ function AdminSettings({ config }) {
 									])
 								}
 							/>
+						</div>
+
+						<div className="form__field">
+							<a onClick={() => setBeachchairs(beachchairs.filter((b) => chair.id !== b.id))}>löschen</a>
 						</div>
 					</div>
 				))}

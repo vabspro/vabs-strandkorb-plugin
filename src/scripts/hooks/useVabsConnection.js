@@ -43,9 +43,9 @@ const createSalesHeaderLine = async ({
 	});
 };
 
-const createSalesInvoice = async ({ salesHeaderId }) => {
+const createSalesInvoice = async (salesHeaderID) => {
 	return await fetchDataAsync({
-		action: `/create_sales_invoice_id?sales_header_id?${salesHeaderId}`,
+		action: `/create_sales_invoice_id?sales_header_id=${salesHeaderID}`,
 		data: null,
 	});
 };
@@ -230,8 +230,7 @@ export const useVabsConnection = async ({
 			);
 			return;
 		}
-
-		const salesInvoice = await createSalesInvoice({ salesHeaderID });
+		const salesInvoice = await createSalesInvoice(salesHeaderID);
 
 		if (!salesInvoice) {
 			useErrorHandler({
