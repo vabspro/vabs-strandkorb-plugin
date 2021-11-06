@@ -4,7 +4,8 @@ import moment from "moment";
 
 function Summary() {
 	const [totalPrice, setTotalPrice] = useState(null);
-	const { contact, startDate, endDate, selectedRentals, voucher, recipient, prices } = useContext(Context);
+	const { contact, startDate, endDate, selectedRentals, voucher, recipient, prices, selectedRentalsMessage } =
+		useContext(Context);
 
 	useEffect(() => {
 		if (prices.length) {
@@ -60,6 +61,10 @@ function Summary() {
 				</div>
 				<div className="summary__section">
 					<strong>Zusammenfassung</strong>
+					{selectedRentalsMessage && !selectedRentals.length && (
+						<div className="notification">{selectedRentalsMessage}</div>
+					)}
+
 					{selectedRentals.length ? (
 						<ul>
 							{selectedRentals.map((chair) => (

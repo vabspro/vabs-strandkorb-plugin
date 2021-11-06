@@ -40,6 +40,7 @@ function FormControls({ agbLink, datenschutzLink, redirectLink }) {
 			type,
 		});
 	};
+	// TODO: write additional Errormessage if user accepts dsgvo and not filled contact form if is mandatory
 
 	return (
 		<div className="formcontrols">
@@ -84,6 +85,7 @@ function FormControls({ agbLink, datenschutzLink, redirectLink }) {
 				</span>
 				<ErrorMessage type="accepted" />
 			</div>
+
 			<button
 				className="button button-primary"
 				style={{ marginTop: "1rem" }}

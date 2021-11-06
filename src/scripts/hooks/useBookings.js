@@ -10,7 +10,7 @@ export const useBookings = ({ startDate, endDate, onFetchStart, onFetchEnd }) =>
 				console.log("fetching bookings");
 				onFetchStart();
 				const response = await fetchDataAsync({
-					action: `/bookings/?startDate=${startDate}&endDate=${endDate}`,
+					action: `/bookings/?startDate=${startDate}&endDate=${endDate ? endDate : startDate}`,
 					data: null,
 				});
 

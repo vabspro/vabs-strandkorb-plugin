@@ -139,7 +139,7 @@ class VABSEndpoints
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
             $this->logger->info('A error message', ['error' => $th]);
 
-            mail('uwe@vabs.pro', $currentDate, $th);;
+            mail('uwe@vabs.pro', $currentDate, $th);
         }
     }
 

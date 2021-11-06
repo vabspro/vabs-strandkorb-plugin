@@ -88,20 +88,29 @@ const Layer = ({ layer, onClose }) => {
 			<div className="mappicker__layer--rows">
 				{Object.keys(filterdRentals).map((name) => (
 					<div className="mappicker__layer--row" key={name}>
-						{filterdRentals[name].map((chair) => (
-							<span
-								key={chair.id}
-								onClick={() => setChair(chair)}
-								className={
-									!layer.online || !chair.online || bookedPlaces.includes(chair.name)
-										? "mappicker__layer--chair disabled"
-										: "mappicker__layer--chair"
-								}
-							>
-								{selectedRentals.find((rental) => rental.id == chair.id) ? <i /> : null}
-								{chair.name}
-							</span>
-						))}
+						{filterdRentals[name].map((chair) => {
+							console.log({
+								chairID: chair.id,
+								chairNumber: chair.name,
+								layerOffline: !layer.online,
+								chairOffline: !chair.online,
+								bokkedPlacesIncludes: bookedPlaces.includes(chair.name),
+							});
+							return (
+								<span
+									key={chair.id}
+									onClick={() => setChair(chair)}
+									className={
+										!layer.online || !chair.online || bookedPlaces.includes(chair.name)
+											? "mappicker__layer--chair disabled"
+											: "mappicker__layer--chair"
+									}
+								>
+									{selectedRentals.find((rental) => rental.id == chair.id) ? <i /> : null}
+									{chair.name}
+								</span>
+							);
+						})}
 					</div>
 				))}
 			</div>

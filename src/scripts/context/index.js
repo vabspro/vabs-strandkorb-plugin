@@ -34,7 +34,7 @@ export const ContextProvider = ({ children, type }) => {
 		disabledDates,
 	} = useRange();
 
-	const { selectedRentals, setSelectedRentals, updateSelectedRentals } = useSelectedRentals({
+	const { selectedRentals, setSelectedRentals, updateSelectedRentals, selectedRentalsMessage } = useSelectedRentals({
 		startDate,
 		endDate,
 		startTime,
@@ -100,6 +100,7 @@ export const ContextProvider = ({ children, type }) => {
 				setRecipient,
 				type,
 				prices,
+				selectedRentalsMessage,
 			}}
 		>
 			{children}
