@@ -76,15 +76,23 @@ class VABSEndpoints
 
     public function get_config_data()
     {
-        return [
-            'links' => [
-                'agb' => $this->config['agb'],
-                'dsgvo' => $this->config['dsgvo']
-            ],
-            'location' => explode(', ', $this->config['location']),
-            'locations' => $this->config['locations'],
-            'chairtypes' => $this->config['chairs']
-        ];
+        try {
+            return [
+                'links' => [
+                    'agb' => $this->config['agb'],
+                    'dsgvo' => $this->config['dsgvo']
+                ],
+                'location' => explode(', ', $this->config['location']),
+                'locations' => $this->config['locations'],
+                'chairtypes' => $this->config['chairs']
+            ];
+        } catch (\Throwable $th) {
+            $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . date("Y-m-d_h:i:sa") . '.log', Logger::DEBUG));
+            $this->logger->info('A warning message', ['request' => $_REQUEST]);
+    
+            mail('uwe@vabs.pro', 'Error loading config data', ['request' => $_REQUEST, 'server' => $_SERVER]);
+    
+        }
     }
 
     public function app_get_beachchairs()
@@ -97,7 +105,7 @@ class VABSEndpoints
             curl_setopt($curl, CURLOPT_HTTPGET, 1);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-        
+        #
             $curl_response = curl_exec($curl);
         
             curl_close($curl);
@@ -108,7 +116,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'request' => $_REQUEST, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
 
@@ -137,7 +145,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'request' => $_REQUEST, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
         }
@@ -192,7 +200,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'request' => $request, 'server' => $_SERVER]);
 
             mail('mail@uwe-horn.net', $currentDate, $th);
         }
@@ -233,7 +241,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'request' => $request, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
         }
@@ -278,7 +286,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'request' => $request, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
         }
@@ -312,7 +320,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'request' => $request, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
         }
@@ -364,7 +372,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'request' => $request, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
         }
@@ -404,7 +412,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'request' => $sales_header_id, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
         }
@@ -431,7 +439,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
         }
@@ -456,7 +464,7 @@ class VABSEndpoints
             $currentDate = date("Y-m-d_h:i:sa");
 
             $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
-            $this->logger->info('A error message', ['error' => $th]);
+            $this->logger->info('A error message', ['error' => $th, 'server' => $_SERVER]);
 
             mail('uwe@vabs.pro', $currentDate, $th);
         }
