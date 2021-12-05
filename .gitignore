@@ -5,6 +5,8 @@ node_modules/
 public/config.php
 
 logs/*
+codes/*
+codes.zip
 
 composer.lock
 yarn.lock

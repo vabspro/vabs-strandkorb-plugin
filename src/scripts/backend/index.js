@@ -9,6 +9,7 @@ import OccupancyPlan from "../modules/OccupancyPlan";
 import AdminSettings from "../modules/AdminSettings";
 
 import "../../styles/backend/styles.sass";
+import QRCodeGenerator from "../modules/QRCodeGenerator";
 
 const element = document.querySelector(".vabs__dashboard");
 
@@ -52,6 +53,15 @@ if (element && element.dataset.type === "settingsform") {
 	ReactDOM.render(
 		<ContextProvider>
 			<AdminSettings {...element.dataset} />
+		</ContextProvider>,
+		element
+	);
+}
+
+if (element && element.dataset.type === "qrcode-generator") {
+	ReactDOM.render(
+		<ContextProvider>
+			<QRCodeGenerator {...element.dataset} />
 		</ContextProvider>,
 		element
 	);

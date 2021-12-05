@@ -1,9 +1,11 @@
 <?php
-
+declare(strict_types=1);
 require VABS_PLUGIN_STRANDKORB_ROOTPATH . 'vendor/autoload.php';
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 class VABSEndpoints
 {
@@ -38,6 +40,11 @@ class VABSEndpoints
         $this->token = $config['api_token'];
         $this->client_id = $config['client_id'];
         $this->url = $config['url'];
+        $this->qrcode_options = new QROptions([
+            'eccLevel' => QRCode::ECC_L,
+            'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+            'version' => 5,
+        ]);
 
         add_action('rest_api_init', function () {
             register_rest_route('app/v1', 'config', ['methods' => 'GET', 'callback' => array($this, 'get_config_data')]);
@@ -60,7 +67,79 @@ class VABSEndpoints
 
             register_rest_route('app/v1', 'voucher_list', ['methods' => 'GET', 'callback' => array($this, 'get_voucher_list')]);
             register_rest_route('app/v1', 'voucher_template_list', ['methods' => 'GET', 'callback' => array($this, 'get_voucher_template_list')]);
+            register_rest_route('app/v1', 'generate_code', ['methods' => 'POST', 'callback' => array($this, 'generate_qr_code')]);
         });
+    }
+
+    public function generate_qr_code()
+    {
+        try {
+            $folder_path = VABS_PLUGIN_STRANDKORB_ROOTPATH . '/codes/';
+            $zip_path = VABS_PLUGIN_STRANDKORB_ROOTPATH . 'codes.zip';
+
+            array_map('unlink', glob("$folder_path/*.*"));
+            rmdir($folder_path);
+            unlink($zip_path);
+
+            $folder = mkdir($folder_path, 0700);
+            $zip = new ZipArchive;
+
+            $request = json_decode(file_get_contents('php://input'));
+        
+            $header = ['Token:' . $this->token];
+            $curl = curl_init($this->url . $this->get_chairs_endpoint);
+        
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPGET, 1);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            $curl_response = curl_exec($curl);
+            curl_close($curl);
+
+            if(isset($request->multiple) && $request->multiple == true){
+                foreach (json_decode($curl_response) as $chair) {
+                    $filename = 'chair-'.$chair->name.'.svg';
+                    $qrcode_target = $request->url . '?chair='.$chair->name;
+                    $qrcode = (new QRCode($this->qrcode_options))->render($qrcode_target);
+                    $svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image width="200" height="200" xlink:href="'.$qrcode.'"/></svg>';
+                    $filepath = VABS_PLUGIN_STRANDKORB_ROOTPATH . '/codes/'.$filename;
+                    $file = fopen($filepath, 'w');
+                    file_put_contents($filepath, $svg);
+                };
+            }else{
+                $filename = 'qrcode.svg';
+                $qrcode_target = $request->url;
+                $qrcode = (new QRCode($this->qrcode_options))->render($qrcode_target);
+                $svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image width="200" height="200" xlink:href="'.$qrcode.'"/></svg>';
+                $filepath = VABS_PLUGIN_STRANDKORB_ROOTPATH . '/codes/'.$filename;
+                $file = fopen($filepath, 'w');
+                file_put_contents($filepath, $svg);
+            }
+            
+
+            $zip = new ZipArchive();
+            $zip->open('codes.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            if($zip->open($zip_path, ZipArchive::CREATE ) === TRUE) {
+                $dir = opendir($folder_path);
+                while($file = readdir($dir)) {
+                    if(is_file($folder_path.$file)) {
+                        $zip->addFile($folder_path.$file, $file);
+                    }
+                }
+                $zip ->close();
+            }
+
+            return [
+                'status' => 'ok',
+                'zipfolder' => $_SERVER['HTTP_ORIGIN'] . '/wp-content/plugins/vabs-strandkorb-plugin/codes.zip'
+            ];
+         
+        } catch (\Throwable $th) {
+            $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . date("Y-m-d_h:i:sa") . '.log', Logger::DEBUG));
+            $this->logger->info('A warning message', ['request' => $_REQUEST, 'error' => $th]);
+    
+            mail('uwe@vabs.pro', 'Error generating code', implode(',', ['request' => $_REQUEST, 'server' => $_SERVER]));
+        }
     }
 
     public function send_error_message_to_admin()
@@ -295,17 +374,20 @@ class VABSEndpoints
 
     public function create_salesheader_id()
     {
+        
         try {
             $request = json_decode(file_get_contents('php://input'));
         
             $header = ['Token:' . $this->token];
-            $curl = curl_init($this->url . $this->create_sales_header_endpoint);
+            $endpoint = $this->url . $this->create_sales_header_endpoint;
+            $curl = curl_init($endpoint);
 
             curl_setopt($curl, CURLOPT_POST, true);
             $data = [
                 'target_client_hash' => $this->client_id,
                 'sellto_contact_id' => $request->contact_id,
             ];
+            
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $header);

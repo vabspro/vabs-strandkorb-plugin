@@ -50,7 +50,7 @@ function FormControls({ agbLink, datenschutzLink, redirectLink }) {
 					checked={contact.accepted}
 					onChange={() => contact.setAccepted(!contact.accepted)}
 				/>
-				<span style={{ fontSize: "12px" }}>
+				<span style={{ fontSize: "12px", flex: 1 }}>
 					Hiermit bestätige ich die
 					{settings.agb !== "" ? (
 						<a

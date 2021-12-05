@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { Map, Marker, TileLayer } from "react-leaflet";
+import { latLngBounds } from "leaflet";
 import { Context } from "../context/index";
 import { useFilteredRentals } from "../hooks/useFilteredRentals";
 import { useGetBookingsId } from "../hooks/useGetBookingsId";
@@ -73,7 +74,7 @@ const Layer = ({ layer, onClose }) => {
 
 	return (
 		<div className="mappicker__layer">
-			<div className="mappicker__layer--close" onClick={onClose}>
+			<div className="mappicker__layer--close" onClick={onClose} style={{ zIndex: 100 }}>
 				<svg viewBox="0 0 492 492" style={{ width: 16 }}>
 					<path d="m464.344 207.418.768.168h-329.224l103.496-103.724c5.068-5.064 7.848-11.924 7.848-19.124s-2.78-14.012-7.848-19.088l-16.104-16.112c-5.064-5.064-11.812-7.864-19.008-7.864-7.2 0-13.952 2.78-19.016 7.844l-177.412 177.396c-5.084 5.084-7.864 11.856-7.844 19.06-.02 7.244 2.76 14.02 7.844 19.096l177.412 177.412c5.064 5.06 11.812 7.844 19.016 7.844 7.196 0 13.944-2.788 19.008-7.844l16.104-16.112c5.068-5.056 7.848-11.808 7.848-19.008 0-7.196-2.78-13.592-7.848-18.652l-104.664-104.304h329.992c14.828 0 27.288-12.78 27.288-27.6v-22.788c0-14.82-12.828-26.6-27.656-26.6z" />
 				</svg>
@@ -133,6 +134,7 @@ const Layer = ({ layer, onClose }) => {
 
 function MapPicker() {
 	const container = useRef();
+	const [bounds, setBounds] = useState(null);
 	const [position, setPosition] = useState([]);
 	const { loading, locations, startDate, endDate, selectedLocation, setSelectedLocation, globalSettings } =
 		useContext(Context);
@@ -143,13 +145,20 @@ function MapPicker() {
 		}
 	}, [globalSettings]);
 
+	useEffect(() => {
+		if (locations.length && container.current) {
+			setBounds(latLngBounds(locations.map((l) => [parseFloat(l.latitude), parseFloat(l.longitude)])));
+		}
+	}, [locations]);
+
 	return (
 		<div
 			className="mappicker"
-			style={{ width: "100%", height: 480, backgroundColor: "whitesmoke", borderRadius: ".6rem" }}
+			style={{ width: "100%", height: 480, backgroundColor: "whitesmoke", borderRadius: ".6rem", zIndex: 1 }}
 		>
 			{position.length && (
 				<Map
+					bounds={bounds ? bounds : null}
 					center={position}
 					zoom={16}
 					ref={container}

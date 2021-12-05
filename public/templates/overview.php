@@ -2,7 +2,7 @@
     <div class="vabs">
         <div class="vabs__card">
             <div class="vabs__card--header">
-                <img src="<?php echo plugins_url('/vabs_strandkorb/assets/img/logo.png'); ?>" alt="logo">
+                <img src="<?php echo plugins_url('/vabs-strandkorb-plugin/assets/img/logo.png'); ?>" alt="logo">
             </div>
             <div class="vabs__card--body">
             <div class="vabs__dashboard" data-type="bookings-overview"></div>

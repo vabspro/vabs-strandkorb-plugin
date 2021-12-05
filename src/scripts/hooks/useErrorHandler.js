@@ -9,12 +9,15 @@ export const useErrorHandler = async (error) => {
 				...error,
 				dateTime: new Date(),
 				userAgent: window.navigator.userAgent,
+				url: window.location,
 			}),
 		})
 			.then((res) => res.json())
 			.catch((err) => console.log(err));
 
-		//window.alert(error.message);
+		window.alert(
+			`Bei diesem Vorgang ist leider ein Fehler aufgetreten: ${error.message}. Unser Administrator wurde informiert. Bitte versucheen Sie es zu einem späteren Zeitpunkt erneut.`
+		);
 		//window.location = window.location.href;
 	} catch (err) {
 		console.log(err);

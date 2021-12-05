@@ -1,0 +1,30 @@
+.qrcode
+    position: relative
+    display: grid
+    grid-template-columns: repeat(2, 1fr)
+    &__column
+        flex: 1
+
+        input[type="text"]
+            display: block
+            width: 100%
+            margin-bottom: 8px
+
+        label
+            display: flex
+            align-items: center
+            justify-content: flex-start
+            margin-bottom: 16px
+
+        .inner
+            display: flex
+            align-items: center
+            justify-content: center
+            flex-direction: column
+            margin: 0 auto
+            padding: 24px
+            svg
+                display: block
+                margin: 0 auto
+            .button
+                margin: 8px auto
