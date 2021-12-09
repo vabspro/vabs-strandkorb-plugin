@@ -160,6 +160,7 @@ export const useVabsConnection = async ({
 			ship_to_contact_id: ship_to_contact_id,
 			voucher_template_id: voucher.template.id,
 			object_code: 8,
+			discount: voucher.item?.discount,
 		};
 		const salesHeaderLine = await createSalesHeaderLine(salesHeaderLinePayload);
 

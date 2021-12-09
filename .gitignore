@@ -13,3 +13,4 @@ yarn.lock
 .DS_Store
 
 .gitconfig
+docker-compose.yml
