@@ -71,6 +71,7 @@ const Layer = ({ layer, onClose }) => {
 	const filterdRentals = useFilteredRentals({ beachChairs, layer });
 	const bookedPlaces = useGetBookingsId({ bookings });
 	const [chair, setChair] = useState(null);
+	console.log(layer);
 
 	return (
 		<div className="mappicker__layer">

@@ -10,7 +10,7 @@ function BeachChairPicker() {
 	const [visible, setVisible] = useState(false);
 
 	useOutsideClickHandler(container, () => setVisible(false));
-
+	console.log(selectedLocation);
 	const bookedPlaces = useGetBookingsId({ bookings });
 
 	return (
@@ -32,28 +32,39 @@ function BeachChairPicker() {
 			</div>
 			{visible && beachChairs ? (
 				<div className="picker__list">
-					{beachChairs
-						.filter(
-							(chair) =>
-								selectedLocation.id === chair.beachChairLocationId &&
-								!bookedPlaces.includes(chair.name) &&
-								chair.online
-						)
-						.map((chair) => (
-							<span
-								className="picker__item"
-								key={chair.id}
-								onClick={() => {
-									if (!selectedRentals.find((c) => c === chair)) {
-										setSelectedRentals([...selectedRentals, chair]);
-									} else {
-										setSelectedRentals([...selectedRentals.filter((c) => c !== chair)]);
-									}
-								}}
-							>
-								Strandkorb {chair.name} am {chair.beachChairLocationName}
-							</span>
-						))}
+					{selectedLocation.online ? (
+						beachChairs
+							.filter(
+								(chair) =>
+									selectedLocation.id === chair.beachChairLocationId &&
+									!bookedPlaces.includes(chair.name) &&
+									chair.online
+							)
+							.map((chair) => (
+								<span
+									className="picker__item"
+									key={chair.id}
+									onClick={() => {
+										if (!selectedRentals.find((c) => c === chair)) {
+											setSelectedRentals([...selectedRentals, chair]);
+										} else {
+											setSelectedRentals([...selectedRentals.filter((c) => c !== chair)]);
+										}
+									}}
+								>
+									{selectedRentals.find((c) => c === chair) ? (
+										<input type="checkbox" checked style={{ marginRight: 8 }} />
+									) : (
+										<input type="checkbox" style={{ marginRight: 8 }} />
+									)}
+									Strandkorb {chair.name} am {chair.beachChairLocationName}
+								</span>
+							))
+					) : (
+						<span style={{ padding: 8, display: "block" }}>
+							Leider ist dieser Strandabschnitt in deinem Zeitraum noch nicht buchbar.
+						</span>
+					)}
 				</div>
 			) : null}
 		</div>
