@@ -67,11 +67,11 @@ const Card = ({ chair, onClose, onSelect, onRemove, online, selected }) => {
 };
 
 const Layer = ({ layer, onClose }) => {
-	const { beachChairs, setSelectedRentals, selectedRentals, bookings } = useContext(Context);
+	const { beachChairs, setSelectedRentals, selectedRentals, bookings, disabledChairDates, startDate, endDate } =
+		useContext(Context);
 	const filterdRentals = useFilteredRentals({ beachChairs, layer });
 	const bookedPlaces = useGetBookingsId({ bookings });
 	const [chair, setChair] = useState(null);
-	console.log(layer);
 
 	return (
 		<div className="mappicker__layer">
@@ -91,19 +91,22 @@ const Layer = ({ layer, onClose }) => {
 				{Object.keys(filterdRentals).map((name) => (
 					<div className="mappicker__layer--row" key={name}>
 						{filterdRentals[name].map((chair) => {
-							console.log({
-								chairID: chair.id,
-								chairNumber: chair.name,
-								layerOffline: !layer.online,
-								chairOffline: !chair.online,
-								bokkedPlacesIncludes: bookedPlaces.includes(chair.name),
-							});
+							let offline = false;
+
+							if (disabledChairDates[chair.id]) {
+								const isIncluded = disabledChairDates[chair.id].find(
+									(arrayOfDates) => arrayOfDates.includes(startDate) || arrayOfDates.includes(endDate)
+								);
+								if (isIncluded) {
+									offline = true;
+								}
+							}
 							return (
 								<span
 									key={chair.id}
 									onClick={() => setChair(chair)}
 									className={
-										!layer.online || !chair.online || bookedPlaces.includes(chair.name)
+										!layer.online || !chair.online || bookedPlaces.includes(chair.name) || offline
 											? "mappicker__layer--chair disabled"
 											: "mappicker__layer--chair"
 									}
@@ -155,7 +158,7 @@ function MapPicker() {
 	return (
 		<div
 			className="mappicker"
-			style={{ width: "100%", height: 480, backgroundColor: "whitesmoke", borderRadius: ".6rem", zIndex: 1 }}
+			style={{ width: "100%", backgroundColor: "whitesmoke", borderRadius: ".6rem", zIndex: 1 }}
 		>
 			{position.length && (
 				<Map
@@ -166,7 +169,7 @@ function MapPicker() {
 					keyboard={false}
 					className="mappicker__map"
 					scrollWheelZoom={false}
-					style={{ width: "100%", height: 480, borderRadius: ".6rem" }}
+					style={{ width: "100%", borderRadius: ".6rem" }}
 				>
 					<TileLayer
 						url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

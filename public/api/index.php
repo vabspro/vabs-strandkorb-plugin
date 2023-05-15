@@ -28,6 +28,7 @@ class VABSEndpoints
     public $create_sales_invoice_endpoint = '/sales/invoice/';
     public $get_voucher_endpoint = '/voucher';
     public $get_voucher_templates_endpoint = '/voucher/templates';
+    public $get_vacancy_data_endpoint = '/beachchair/booking/vacancy/';
 
     public function __construct()
     {
@@ -68,6 +69,8 @@ class VABSEndpoints
             register_rest_route('app/v1', 'voucher_list', ['methods' => 'GET', 'callback' => array($this, 'get_voucher_list')]);
             register_rest_route('app/v1', 'voucher_template_list', ['methods' => 'GET', 'callback' => array($this, 'get_voucher_template_list')]);
             register_rest_route('app/v1', 'generate_code', ['methods' => 'POST', 'callback' => array($this, 'generate_qr_code')]);
+
+            register_rest_route('app/v1', 'vacancy', ['methods' => 'POST','callback' => array($this, 'get_vacancy_data')]);
         });
     }
 
@@ -542,6 +545,41 @@ class VABSEndpoints
 
             curl_close($curl);
 
+            return json_decode($curl_response);
+        } catch (\Throwable $th) {
+            $currentDate = date("Y-m-d_h:i:sa");
+
+            $this->logger->pushHandler(new StreamHandler(VABS_PLUGIN_STRANDKORB_ROOTPATH . '/logs/' . $currentDate . '.log', Logger::DEBUG));
+            $this->logger->info('A error message', ['error' => $th, 'server' => $_SERVER]);
+
+            mail('uwe@vabs.pro', $currentDate, $th);
+        }
+    }
+
+    public function get_vacancy_data () {
+        try {
+            $request = json_decode(file_get_contents('php://input'));
+    
+            if (!isset($request->startDate) && !isset($request->endDate)) {
+                return [
+                    'error' => 'dates are mandatory',
+                ];
+            }
+    
+
+            $requestUrl = $this->get_vacancy_data_endpoint . $request->startDate . '/' . $request->endDate;
+    
+            $header = ['Token: ' . $this->token];
+            $curl = curl_init($this->url . $requestUrl);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPGET, 1);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        
+            $curl_response = curl_exec($curl);
+    
+            curl_close($curl);
+    
             return json_decode($curl_response);
         } catch (\Throwable $th) {
             $currentDate = date("Y-m-d_h:i:sa");

@@ -31,7 +31,7 @@ function BillingDetails() {
 					<ErrorMessage type="street" />
 				</div>
 				<div className="billingdetails__field">
-					<label>Hausnummer</label>
+					<label>Nr.</label>
 					<input type="text" value={contact.number} onChange={(e) => contact.setNumber(e.target.value)} />
 					<ErrorMessage type="number" />
 				</div>

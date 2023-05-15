@@ -14,9 +14,10 @@ import VoucherForm from "../modules/VoucherForm";
 import { useContainerSize } from "../hooks/useContainerSize";
 import ErrorFallback from "../components/ErrorFallback";
 import { ErrorBoundary } from "react-error-boundary";
+import VacancyForm from "../components/VacancyForm";
 
 function App({ type, redirect, agb, datenschutz }) {
-	const { loading, success } = useContext(Context);
+	const { loading, success, vacancy } = useContext(Context);
 	const { width } = useContainerSize();
 	let render = (
 		<>
@@ -27,18 +28,22 @@ function App({ type, redirect, agb, datenschutz }) {
 					<RangePicker />
 				</div>
 
-				<div className="bookingform__section">
-					<h3>Schritt 2</h3>
-					<p>Strandkorb wählen</p>
-					<ErrorMessage type="selectedRentals" />
+				{vacancy ? (
+					<VacancyForm {...vacancy} />
+				) : (
+					<div className="bookingform__section">
+						<h3>Schritt 2</h3>
+						<p>Strandkorb wählen</p>
+						<ErrorMessage type="selectedRentals" />
 
-					<div className="bookingform__columns">
-						<LocationPicker />
-						<BeachChairPicker />
+						<div className="bookingform__columns">
+							<LocationPicker />
+							<BeachChairPicker />
+						</div>
+
+						<MapPicker />
 					</div>
-
-					<MapPicker />
-				</div>
+				)}
 
 				<div className="bookingform__section">
 					<h3>Schritt 3</h3>

@@ -10,6 +10,8 @@ import { useRange } from "../hooks/useRange";
 import { useSelectedRentals } from "../hooks/useSelectedRantals";
 import { useVoucher } from "../hooks/useVoucher";
 import { usePrices } from "../hooks/usePrices";
+import { useDisabledDates } from "../hooks/useDisabledDates";
+import useVacancy from "../hooks/useVacancy";
 
 export const Context = createContext();
 
@@ -64,6 +66,16 @@ export const ContextProvider = ({ children, type }) => {
 		shouldFetch: type === "booking",
 	});
 	const [selectedLocation, setSelectedLocation] = useState(null);
+	const { disabledDates: disabledChairDates } = useDisabledDates({ rentals: beachChairs });
+
+	const { data: vacancy } = useVacancy({
+		disabledDates: disabledChairDates,
+		rentals: beachChairs,
+		bookings,
+		locations,
+		startDate,
+		endDate,
+	});
 
 	return (
 		<Context.Provider
@@ -101,6 +113,8 @@ export const ContextProvider = ({ children, type }) => {
 				type,
 				prices,
 				selectedRentalsMessage,
+				disabledChairDates,
+				vacancy,
 			}}
 		>
 			{children}

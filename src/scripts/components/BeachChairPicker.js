@@ -6,11 +6,20 @@ import ErrorMessage from "./ErrorMessage";
 
 function BeachChairPicker() {
 	const container = useRef(null);
-	const { selectedLocation, beachChairs, selectedRentals, setSelectedRentals, bookings } = useContext(Context);
+	const {
+		selectedLocation,
+		beachChairs,
+		selectedRentals,
+		setSelectedRentals,
+		bookings,
+		disabledChairDates,
+		startDate,
+		endDate,
+	} = useContext(Context);
 	const [visible, setVisible] = useState(false);
 
 	useOutsideClickHandler(container, () => setVisible(false));
-	console.log(selectedLocation);
+
 	const bookedPlaces = useGetBookingsId({ bookings });
 
 	return (
@@ -34,12 +43,28 @@ function BeachChairPicker() {
 				<div className="picker__list">
 					{selectedLocation.online ? (
 						beachChairs
+							.filter((rental) => {
+								let offline = false;
+								console.log({ startDate, endDate });
+								if (disabledChairDates[rental.id]) {
+									const isIncluded = disabledChairDates[rental.id].find(
+										(arrayOfDates) =>
+											arrayOfDates.includes(startDate) || arrayOfDates.includes(endDate)
+									);
+									if (isIncluded) {
+										offline = true;
+									}
+								}
+
+								return !offline;
+							})
 							.filter(
 								(chair) =>
 									selectedLocation.id === chair.beachChairLocationId &&
 									!bookedPlaces.includes(chair.name) &&
 									chair.online
 							)
+
 							.map((chair) => (
 								<span
 									className="picker__item"

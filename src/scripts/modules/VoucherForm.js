@@ -12,6 +12,7 @@ function VoucherForm() {
 				<p>Für wen soll der Gutschein sein?</p>
 				<input
 					type="text"
+					id="voucher-person"
 					style={{ display: "block", width: "100%" }}
 					value={recipient}
 					onChange={(e) => setRecipient(e.target.value)}
