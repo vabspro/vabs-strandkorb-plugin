@@ -43,7 +43,7 @@ const createSalesHeaderLine = async ({
 	});
 };
 
-const createSalesInvoice = async (salesHeaderID) => {
+const createSalesInvoice = async ({ salesHeaderID }) => {
 	return await fetchDataAsync({
 		action: `/create_sales_invoice_id?sales_header_id=${salesHeaderID}`,
 		data: null,
